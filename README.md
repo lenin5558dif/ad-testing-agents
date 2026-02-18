@@ -1,101 +1,151 @@
-# Ad Testing Agents — SaaS
+# Ad Testing Agents
 
 **Test ad offers on AI personas before spending money on ads.**
 
-Instead of running expensive ad campaigns to find what works — simulate 7 psychologically distinct personas (Big Five model, cognitive biases, life stories) and get conversion rates, perceived value scores, objections, and "what would convince me" in seconds.
+Instead of running expensive campaigns to find what converts — simulate psychologically rich personas and get conversion rates, perceived value scores, objections, and "what would convince me" in seconds.
+
+---
 
 ## Screenshots
 
-**Main interface — enter your ad offer:**
+**Main interface — enter your ad offer, select personas:**
+
 ![Main](docs/screenshot-main.png)
 
-**Results — 86% conversion, 8.1/10 value, persona-by-persona breakdown:**
+**Results — instant analytics across all personas:**
+
 ![Results](docs/screenshot-results.png)
 
-**Batch comparison — 10 offers × 7 personas = 70 tests ranked by performance:**
+**Batch comparison — 10 offers × 7 personas = 70 tests, ranked by performance:**
+
 ![Comparison](docs/screenshot-comparison.png)
 
 ---
 
-## What it does
+## How it works
 
-1. Ты описываешь нишу бизнеса
-2. AI генерирует психологически глубоких персон (Big Five, когнитивные искажения, конкретные жизненные истории)
-3. AI генерирует рекламные офферы по копирайтерским фреймворкам (PAS, AIDA, BAB, Social Proof, Urgency, Contrarian)
-4. Каждая персона оценивает каждый оффер через 5-шаговый анализ (первое впечатление → триггеры → боли/ценности → чеклист критериев → личный опыт)
-5. Ты получаешь heatmap, инсайты, рекомендации — какой оффер для какого сегмента работает
+1. Describe your offer (headline, body, CTA, price)
+2. Select personas to test against (or use all 7 defaults)
+3. Each persona evaluates the offer through a 5-step analysis:
+   - First impression
+   - Emotional triggers
+   - Pain points addressed
+   - Decision criteria checklist
+   - Personal experience filter
+4. Get metrics per persona: emotion, decision, perceived value, objections, what would convince
+5. Batch mode: compare 10+ offers simultaneously, get ranked leaderboard
 
-## Стек
+---
 
-- **Frontend**: Next.js 16 (App Router, `'use client'`)
-- **Backend**: Next.js API Routes + BullMQ workers
-- **Database**: PostgreSQL + Prisma ORM
-- **Queue**: Redis + BullMQ (конкурентность: 5 воркеров)
-- **AI**: OpenRouter API (Google Gemini 3 Flash)
-- **Auth**: NextAuth v4 (Credentials + JWT)
-- **Tests**: Vitest (94 юнит-теста) + Playwright (E2E)
-- **Deploy**: Docker Compose (postgres, redis, next-app, worker)
+## Personas (default set)
 
-## Фичи
+| Persona | Profile |
+|---------|---------|
+| Ekaterina | Business woman, 35, time-poor, values quality |
+| Anna | Active student, 22, price-sensitive, social-driven |
+| Irina | Impulsive buyer, 28, FOMO-driven, acts fast |
+| Alexei | Fitness enthusiast, 30, analytical, needs proof |
+| Olga | Skeptic with bad experience, 40, high objections |
+| Maria | Young mom post-partum, 32, cautious, trust-focused |
+| Natalya | Woman 45+, wants to look younger, quality-conscious |
 
-- Регистрация/логин, демо-проект при первом входе
-- CRUD персон и офферов (ручной + AI-генерация)
-- Запуск тестов: каждая пара персона×оффер обрабатывается параллельно
-- Отчёт в реальном времени: heatmap, winners table, инсайты, стратегия
-- Retry для упавших оценок
-- Rate limiting (30 req/min API, 3 теста/мин)
-- Планы: FREE (5 тестов/мес), PRO (50), AGENCY (безлимит)
-- Мобильная адаптация (hamburger-меню, slide-over sidebar)
-- Prompt injection protection (`<user_input>` маркеры)
+Each persona has: Big Five personality model, cognitive biases, income bracket, life story, pain points, positive/negative triggers, decision factors.
 
-## Качество оценки
+---
 
-Промпты прошли несколько итераций улучшения:
+## Stack
 
-**Генерация персон** (8.3/10): Big Five модель, когнитивные искажения, медиа-привычки, конкретные жизненные истории, anti-patterns
+**Python prototype** (fully working, batteries included):
+- Streamlit dashboard
+- Anthropic Claude API (evaluation)
+- 8 JSON persona profiles
+- Batch testing with results export
 
-**Генерация офферов** (8.8/10): 6 копирайтерских фреймворков с примерами, правила хорошей рекламы, разные стратегии и психотипы
+**Next.js SaaS** (production-grade scaffold):
+- Next.js 15 (App Router)
+- PostgreSQL + Prisma ORM
+- Redis + BullMQ (job queue, 5 concurrent workers)
+- OpenRouter API (Gemini Flash)
+- NextAuth v4 (Credentials + JWT)
+- Vitest (94 unit tests) + Playwright (E2E)
+- Docker Compose deployment
+- Sentry error tracking
+- Rate limiting (30 req/min)
 
-**System prompt для оценки** (9.2/10): Поведенческий фреймворк по доходу/возрасту, traits→паттерны, decision factors как жёсткие фильтры, 6 anti-patterns
+---
 
-**Evaluation prompt** (9.4/10): 5-шаговый chain-of-thought, калиброванные шкалы, anti-positivity bias (базовая ставка, loss aversion), использование ВСЕХ данных персоны
-
-Пример: generic оффер "Скидка 30% на кофе" получает 3.5/10 (probably_not). Таргетированный оффер, попадающий в боли и триггеры персоны — 9.2/10 (strong_yes).
-
-## Quick Start
-
-См. [QUICKSTART.md](QUICKSTART.md)
-
-## Структура проекта
-
-См. [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)
-
-## Тесты
-
-```bash
-cd saas
-npx vitest run          # 94 юнит-теста
-npx playwright test     # E2E (register → create → generate → test → report)
-npx tsc --noEmit        # TypeScript проверка
-```
-
-## Утилиты
+## Quick Start (Python version)
 
 ```bash
-# Прогнать одну оценку персона×оффер (из базы)
-npx tsx scripts/test-eval.ts
+# 1. Clone and install
+git clone https://github.com/lenin5558dif/ad-testing-agents.git
+cd ad-testing-agents
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e .
 
-# Прогнать кастомный оффер (без записи в базу)
-npx tsx scripts/test-eval-custom.ts
+# 2. Add API key
+cp .env.example .env
+# Edit .env: ANTHROPIC_API_KEY=sk-ant-...
+
+# 3. Run dashboard
+streamlit run dashboard/app.py
+# Opens at http://localhost:8501
 ```
 
-## Стоимость
+---
 
-- Gemini 3 Flash через OpenRouter: ~$0.01-0.02 за одну оценку
-- Тест 4 персоны × 4 оффера = 16 оценок ≈ $0.15-0.30
-- Генерация 4 персон ≈ $0.02, генерация 4 офферов ≈ $0.02
+## Prompt quality
 
-## История
+Prompts went through multiple evaluation iterations:
 
-1. **Python-прототип** (`src/`, `dashboard/`) — Streamlit UI + Anthropic API, 8 захардкоженных персон
-2. **SaaS** (`saas/`) — полноценное веб-приложение с генерацией персон/офферов, очередью задач, отчётами
+| Component | Score | What it does |
+|-----------|-------|--------------|
+| Persona generation | 8.3/10 | Big Five, cognitive biases, media habits, life stories |
+| Offer generation | 8.8/10 | 6 copywriting frameworks (PAS, AIDA, BAB, Social Proof, Urgency, Contrarian) |
+| System prompt | 9.2/10 | Behavioral framework by income/age, trait→pattern mapping |
+| Evaluation prompt | 9.4/10 | 5-step CoT, calibrated scales, anti-positivity bias |
+
+Example: generic "30% coffee discount" scores 3.5/10 (probably_not). Targeted offer hitting persona's pain points and triggers — 9.2/10 (strong_yes).
+
+---
+
+## Cost
+
+- Claude Sonnet via Anthropic: ~$0.01–0.02 per evaluation
+- 4 personas × 4 offers = 16 evaluations ≈ $0.15–0.30
+- Gemini Flash via OpenRouter: ~$0.005 per evaluation (SaaS version)
+
+---
+
+## Project structure
+
+```
+ad-testing-agents/
+├── src/                    # Python package
+│   └── ad_testing_agents/
+│       ├── agents/         # Claude, mock, orchestrator
+│       ├── models/         # Offer, Persona, Response
+│       ├── personas/       # 8 JSON persona profiles
+│       └── prompts/        # Evaluation & system prompts
+├── dashboard/              # Streamlit UI
+├── data/
+│   ├── test_offers.json    # 10 sample offers
+│   └── results/            # Test results (gitignored)
+├── docs/                   # Screenshots
+└── saas/                   # Next.js SaaS
+    ├── app/                # App Router pages
+    ├── components/         # UI components (heatmap, report, etc.)
+    ├── lib/                # AI, auth, queue, prompts
+    ├── workers/            # BullMQ evaluation worker
+    ├── prisma/             # DB schema + migrations
+    └── __tests__/          # 94 unit tests
+```
+
+---
+
+## Built by
+
+**Dmitry Firsov** — serial entrepreneur, AI builder.
+230M₽ revenue from zero · 90 projects launched · 500+ hours vibe-coding
+
+Telegram: [@empire_on_ai](https://t.me/empire_on_ai)
