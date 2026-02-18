@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+// App models
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String?
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  plan          Plan      @default(FREE)
+  planExpiresAt DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
+  createdAt     DateTime  @default(now())
+}
+
+enum Plan {
+  FREE
+  PRO
+  AGENCY
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  niche       String
+  isDemo      Boolean   @default(false)
+  personas    Persona[]
+  offers      Offer[]
+  testRuns    TestRun[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Persona {
+  id               String   @id @default(cuid())
+  projectId        String
+  project          Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name             String
+  description      String
+  ageGroup         String
+  incomeLevel      String
+  occupation       String
+  personalityTraits Json     // string[]
+  values           Json     // string[]
+  painPoints       Json     // string[]
+  goals            Json     // string[]
+  triggersPositive String   @db.Text
+  triggersNegative String   @db.Text
+  decisionFactors  Json     // string[]
+  backgroundStory  String   @db.Text
+  responses        PersonaResponse[]
+  createdAt        DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Offer {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  headline     String
+  body         String?  @db.Text
+  callToAction String?
+  price        String?
+  strategyType String?
+  responses    PersonaResponse[]
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model TestRun {
+  id             String     @id @default(cuid())
+  projectId      String
+  project        Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status         TestStatus @default(PENDING)
+  modelUsed      String     @default("anthropic/claude-3-haiku")
+  promptVersion  String     @default("eval-v1")
+  totalPairs     Int        @default(0)
+  completedPairs Int        @default(0)
+  failedPairs    Int        @default(0)
+  responses      PersonaResponse[]
+  createdAt      DateTime   @default(now())
+
+  @@index([projectId])
+}
+
+enum TestStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+model PersonaResponse {
+  id                String   @id @default(cuid())
+  testRunId         String
+  testRun           TestRun  @relation(fields: [testRunId], references: [id], onDelete: Cascade)
+  personaId         String
+  persona           Persona  @relation(fields: [personaId], references: [id], onDelete: Restrict)
+  offerId           String
+  offer             Offer    @relation(fields: [offerId], references: [id], onDelete: Restrict)
+  status            String   @default("pending") // pending, completed, failed
+  decision          String?
+  confidence        Float?
+  perceivedValue    Float?
+  emotion           String?
+  emotionIntensity  Float?
+  firstReaction     String?  @db.Text
+  reasoning         String?  @db.Text
+  objections        Json?    // string[]
+  whatWouldConvince String?  @db.Text
+  valueAlignment    Json?    // { value: score }
+  retryCount        Int      @default(0)
+  responseTimeMs    Int?
+  createdAt         DateTime @default(now())
+
+  @@unique([testRunId, personaId, offerId])
+  @@index([testRunId])
+}

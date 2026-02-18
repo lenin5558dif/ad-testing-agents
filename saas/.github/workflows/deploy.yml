@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/ad-testing-agents/saas/**'
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push app image
+        uses: docker/build-push-action@v5
+        with:
+          context: experiments/ad-testing-agents/saas
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}:latest,${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha }}
+
+      - name: Build and push worker image
+        uses: docker/build-push-action@v5
+        with:
+          context: experiments/ad-testing-agents/saas
+          file: experiments/ad-testing-agents/saas/Dockerfile.worker
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}-worker:latest,${{ env.REGISTRY }}/${{ github.repository }}-worker:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /opt/ad-testing-saas
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml exec app npx prisma migrate deploy
+            sleep 5
+            curl -f http://localhost:3000/api/health || echo "Health check failed"

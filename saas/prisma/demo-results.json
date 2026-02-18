@@ -1,0 +1,110 @@
+[
+  {
+    "personaIndex": 0, "offerIndex": 0,
+    "decision": "maybe_yes", "confidence": 0.65, "perceivedValue": 6.5,
+    "emotion": "interested", "emotionIntensity": 0.6,
+    "firstReaction": "О, скидка 30%! Для студента это существенно.",
+    "reasoning": "Цена привлекательная, но хочу знать качество кофе. Если это обычный латте из автомата, то нет.",
+    "objections": ["Нет информации о качестве", "Далеко ли от универа?"],
+    "whatWouldConvince": "Отзывы других студентов и фото заведения"
+  },
+  {
+    "personaIndex": 0, "offerIndex": 1,
+    "decision": "probably_not", "confidence": 0.7, "perceivedValue": 3.5,
+    "emotion": "skeptical", "emotionIntensity": 0.5,
+    "firstReaction": "Арабика из Эфиопии? Звучит дорого для студента.",
+    "reasoning": "Качество кофе это круто, но я не готов переплачивать. Мне важнее быстро и недорого.",
+    "objections": ["Цена выше средней", "Не чувствую разницу в сортах"],
+    "whatWouldConvince": "Если бы была программа лояльности с накопительной скидкой"
+  },
+  {
+    "personaIndex": 0, "offerIndex": 2,
+    "decision": "strong_yes", "confidence": 0.85, "perceivedValue": 8.0,
+    "emotion": "excited", "emotionIntensity": 0.7,
+    "firstReaction": "Заказ через приложение и самовывоз? Отлично!",
+    "reasoning": "Именно то, что нужно — не тратить время в очереди. Если работает быстро, буду пользоваться каждый день.",
+    "objections": ["Надеюсь приложение не глючит"],
+    "whatWouldConvince": null
+  },
+  {
+    "personaIndex": 1, "offerIndex": 0,
+    "decision": "neutral", "confidence": 0.5, "perceivedValue": 5.0,
+    "emotion": "neutral", "emotionIntensity": 0.3,
+    "firstReaction": "Ещё одна скидка... Сколько таких предложений я вижу каждый день.",
+    "reasoning": "Скидки не впечатляют. Мне важнее атмосфера и чтобы кофе был хороший. 30% — ну ок, но это не мотивация.",
+    "objections": ["Скидки обычно на плохой кофе", "Не указано что за кофе"],
+    "whatWouldConvince": "Если бы показали обстановку и меню"
+  },
+  {
+    "personaIndex": 1, "offerIndex": 1,
+    "decision": "strong_yes", "confidence": 0.8, "perceivedValue": 8.5,
+    "emotion": "interested", "emotionIntensity": 0.7,
+    "firstReaction": "Наконец-то кто-то говорит про качество! Арабика из Эфиопии — интересно.",
+    "reasoning": "Это именно то, что я ценю. Готов платить за хороший кофе. Если они действительно разбираются в сортах, стану постоянным клиентом.",
+    "objections": ["Хочу попробовать прежде чем судить"],
+    "whatWouldConvince": null
+  },
+  {
+    "personaIndex": 1, "offerIndex": 2,
+    "decision": "maybe_yes", "confidence": 0.6, "perceivedValue": 6.0,
+    "emotion": "curious", "emotionIntensity": 0.5,
+    "firstReaction": "Удобство — это плюс, но не главное для меня.",
+    "reasoning": "Приложение для заказа — норм, но я хожу в кофейню ещё и за атмосферой. Самовывоз лишает удовольствия.",
+    "objections": ["Теряется атмосфера", "Кофе остывает пока несёшь"],
+    "whatWouldConvince": "Если бы была доставка горячего кофе к столу"
+  },
+  {
+    "personaIndex": 2, "offerIndex": 0,
+    "decision": "strong_yes", "confidence": 0.9, "perceivedValue": 8.5,
+    "emotion": "excited", "emotionIntensity": 0.8,
+    "firstReaction": "30% скидка! Наконец-то могу себе позволить нормальный кофе!",
+    "reasoning": "С тремя детьми каждая копейка на счету. Скидка 30% — это реальная экономия. Если кофе нормальный, буду ходить регулярно.",
+    "objections": ["Скидка временная?"],
+    "whatWouldConvince": null
+  },
+  {
+    "personaIndex": 2, "offerIndex": 1,
+    "decision": "not_for_me", "confidence": 0.8, "perceivedValue": 2.0,
+    "emotion": "annoyed", "emotionIntensity": 0.6,
+    "firstReaction": "Арабика из Эфиопии за какие деньги? Мне бы что попроще.",
+    "reasoning": "Красиво звучит, но я не готова переплачивать за бренд зёрен. У меня трое детей, мне нужен просто хороший кофе по нормальной цене.",
+    "objections": ["Слишком дорого", "Не для моего бюджета", "Претенциозно"],
+    "whatWouldConvince": "Если бы были детские напитки и скидки для семей"
+  },
+  {
+    "personaIndex": 2, "offerIndex": 2,
+    "decision": "strong_yes", "confidence": 0.85, "perceivedValue": 9.0,
+    "emotion": "hopeful", "emotionIntensity": 0.8,
+    "firstReaction": "Заказ заранее? Это спасение для мамы!",
+    "reasoning": "Когда бежишь с детьми, нет времени стоять в очереди. Заказать через приложение и забрать — идеально. Буду пользоваться каждый день!",
+    "objections": [],
+    "whatWouldConvince": null
+  },
+  {
+    "personaIndex": 3, "offerIndex": 0,
+    "decision": "probably_not", "confidence": 0.6, "perceivedValue": 4.0,
+    "emotion": "skeptical", "emotionIntensity": 0.4,
+    "firstReaction": "Скидки — это всегда подвох. Что-то с этим кофе не так.",
+    "reasoning": "За 40 лет научился — бесплатный сыр только в мышеловке. Если делают скидку, значит кофе не покупают. Лучше пойду в проверенное место.",
+    "objections": ["Не доверяю скидкам", "Почему скидка — что-то не так?"],
+    "whatWouldConvince": "Рекомендация от знакомых"
+  },
+  {
+    "personaIndex": 3, "offerIndex": 1,
+    "decision": "maybe_yes", "confidence": 0.55, "perceivedValue": 6.0,
+    "emotion": "curious", "emotionIntensity": 0.4,
+    "firstReaction": "Хм, арабика из Эфиопии. Звучит достойно.",
+    "reasoning": "Мне нравится когда люди разбираются в своём деле. Но не факт что я почувствую разницу. Надо попробовать.",
+    "objections": ["Возможно переоценивают свой кофе", "Дорого для пенсионера"],
+    "whatWouldConvince": "Дегустация или первая чашка бесплатно"
+  },
+  {
+    "personaIndex": 3, "offerIndex": 2,
+    "decision": "strong_no", "confidence": 0.9, "perceivedValue": 1.5,
+    "emotion": "annoyed", "emotionIntensity": 0.7,
+    "firstReaction": "Приложение? Я в свои годы с этими приложениями...",
+    "reasoning": "Не хочу ставить приложение. Хочу прийти, заказать на кассе, поговорить с бариста. Зачем вся эта цифровизация?",
+    "objections": ["Сложно для пожилых", "Не хочу зависеть от телефона", "Обезличивает сервис"],
+    "whatWouldConvince": "Если бы можно было заказать по телефону голосом"
+  }
+]
